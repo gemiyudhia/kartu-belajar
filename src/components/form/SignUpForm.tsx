@@ -1,78 +1,21 @@
 "use client";
 
-import React from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import z, { email } from "zod";
-import { Github, Lock, Mail, User } from "lucide-react";
+import { Form } from "@/components/ui/form";
+import z from "zod";
+import { Lock, Mail, User } from "lucide-react";
 import { Separator } from "../ui/separator";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
-import { FcGoogle } from "react-icons/fc";
-import Link from "next/link";
-
-const passwordSchema = z
-  .string()
-  .trim()
-  .min(8, "Kata sandi harus terdiri dari minimal 8 karakter");
-
-const formSchema = z
-  .object({
-    fullname: z
-      .string()
-      .trim()
-      .min(2, "Nama lengkap wajib diisi dan minimal 2 karakter")
-      .max(50, "Nama lengkap tidak boleh lebih dari 50 karakter"),
-    email: z
-      .string()
-      .trim()
-      .min(1, "Email wajib diisi")
-      .refine((val) => z.email(val).safeParse(val).success, {
-        message: "Email tidak valid",
-      }),
-    password: passwordSchema,
-    confirmPassword: passwordSchema,
-  })
-  .superRefine(({ password, confirmPassword }, ctx) => {
-    if (password !== confirmPassword) {
-      ctx.addIssue({
-        code: "custom",
-        path: ["confirmPassword"],
-        message: "Konfirmasi kata sandi tidak sama",
-      });
-    }
-  });
+import FormInput from "./FormInput";
+import { signUpSchema } from "@/lib/validations/signUpSchema";
+import { useSignUpForm } from "@/hooks/useSignUpForm";
+import AuthCardWrapper from "../auth/AuthCardWrapper";
+import SocialLoginButton from "../auth/SocialLoginButton";
+import FormFooter from "../auth/FormFooter";
 
 const SignUpForm = () => {
-  // 1. Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      fullname: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    },
-  });
+  const form = useSignUpForm();
 
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof signUpSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
@@ -80,181 +23,71 @@ const SignUpForm = () => {
 
   return (
     <div className="w-[500px]">
-      <Card className="shadow-xl border-0 backdrop-blur-sm">
-        <CardHeader className="space-y-1 text-center pb-8">
-          <CardTitle className="text-2xl font-bold tracking-tight">
-            Buat Akun
-          </CardTitle>
-          <CardDescription className="text-slate-600">
-            Yuk, daftar dan mulai belajarmu!
-          </CardDescription>
-        </CardHeader>
-
-        <CardContent className="space-y-6">
-          {/* Social Login */}
-          <div className="w-full">
-            <Button
-              variant="outline"
-              className="bg-transparent w-full cursor-pointer"
-            >
-              <FcGoogle />
-              Google
-            </Button>
+      <AuthCardWrapper
+        title="Buat Akun"
+        description="Yuk, daftar dan mulai belajarmu!"
+      >
+        <SocialLoginButton />
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <Separator className="w-full" />
           </div>
-
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <Separator className="w-full" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-white px-2 text-slate-500">
-                Atau lanjutkan dengan
-              </span>
-            </div>
-          </div>
-
-          {/* Register Form */}
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <FormField
-                control={form.control}
-                name="fullname"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-sm font-medium text-slate-700">
-                      Nama Lengkap
-                    </FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4" />
-                        <Input
-                          placeholder="Masukan Nama Lengkap"
-                          className="pl-10 h-11 border-slate-200 focus:border-green-500 focus:ring-green-500"
-                          {...field}
-                        />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-sm font-medium text-slate-700">
-                      Email
-                    </FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4" />
-                        <Input
-                          placeholder="Masukan Email Anda"
-                          className="pl-10 h-11 border-slate-200 focus:border-green-500 focus:ring-green-500"
-                          {...field}
-                        />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-sm font-medium text-slate-700">
-                      Kata Sandi
-                    </FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4" />
-                        <Input
-                          //   type={showPassword ? "text" : "password"}
-                          placeholder="Masukan Kata Sandi"
-                          className="pl-10 pr-10 h-11 border-slate-200 focus:border-green-500 focus:ring-green-500"
-                          {...field}
-                        />
-                        <button
-                          type="button"
-                          //   onClick={() => setShowPassword(!showPassword)}
-                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                        >
-                          {/* {showPassword ? (
-                            <EyeOff className="w-4 h-4" />
-                          ) : (
-                            <Eye className="w-4 h-4" />
-                          )} */}
-                        </button>
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="confirmPassword"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-sm font-medium text-slate-700">
-                      Konfirmasi Kata Sandi
-                    </FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4" />
-                        <Input
-                          //   type={showConfirmPassword ? "text" : "password"}
-                          placeholder="Konfirmasi Kata Sandi"
-                          className="pl-10 pr-10 h-11 border-slate-200 focus:border-green-500 focus:ring-green-500"
-                          {...field}
-                        />
-                        <button
-                          type="button"
-                          //   onClick={() =>
-                          //     setShowConfirmPassword(!showConfirmPassword)
-                          //   }
-                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                        >
-                          {/* {showConfirmPassword ? (
-                            <EyeOff className="w-4 h-4" />
-                          ) : (
-                            <Eye className="w-4 h-4" />
-                          )} */}
-                        </button>
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <Button
-                type="submit"
-                className="w-full h-11 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium transition-all duration-200 cursor-pointer"
-              >
-                Buat Akun
-              </Button>
-            </form>
-          </Form>
-          <div className="text-center">
-            <span className="text-sm text-slate-600">
-              Sudah Punya Akun? {""}
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-white px-2 text-slate-500">
+              Atau lanjutkan dengan
             </span>
-            <Link
-              href="/signin"
-              className="text-blue-600 hover:text-blue-800 font-medium"
-            >
-              Masuk
-            </Link>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormInput
+              name="fullname"
+              label="Nama Lengkap"
+              placeholder="Masukan Nama Lengkap"
+              control={form.control}
+              icon={<User className="w-4 h-4" />}
+            />
+
+            <FormInput
+              name="email"
+              label="Email"
+              placeholder="Masukan Email"
+              control={form.control}
+              icon={<Mail className="w-4 h-4" />}
+            />
+
+            <FormInput
+              name="password"
+              label="Kata Sandi"
+              placeholder="Masukan Password"
+              control={form.control}
+              icon={<Lock className="w-4 h-4" />}
+              toggleVisibility
+              type="password"
+            />
+
+            <FormInput
+              name="confirmPassword"
+              label="Konfirmasi Password"
+              placeholder="Konfirmasi Password"
+              control={form.control}
+              icon={<Lock className="w-4 h-4" />}
+              toggleVisibility
+              type="password"
+            />
+
+            <Button
+              type="submit"
+              className="w-full h-11 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium transition-all duration-200 cursor-pointer"
+            >
+              Buat Akun
+            </Button>
+          </form>
+        </Form>
+
+        <FormFooter title="Sudah punya akun?" label="Masuk" link="/signin" />
+      </AuthCardWrapper>
     </div>
   );
 };
