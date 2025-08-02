@@ -25,6 +25,7 @@ import {
   CardTitle,
 } from "../ui/card";
 import { FcGoogle } from "react-icons/fc";
+import Link from "next/link";
 
 const passwordSchema = z
   .string()
@@ -42,7 +43,9 @@ const formSchema = z
       .string()
       .trim()
       .min(1, "Email wajib diisi")
-      .email("Format email tidak valid"),
+      .refine((val) => z.email(val).safeParse(val).success, {
+        message: "Email tidak valid",
+      }),
     password: passwordSchema,
     confirmPassword: passwordSchema,
   })
@@ -90,7 +93,10 @@ const SignUpForm = () => {
         <CardContent className="space-y-6">
           {/* Social Login */}
           <div className="w-full">
-            <Button variant="outline" className="bg-transparent w-full">
+            <Button
+              variant="outline"
+              className="bg-transparent w-full cursor-pointer"
+            >
               <FcGoogle />
               Google
             </Button>
@@ -230,28 +236,23 @@ const SignUpForm = () => {
 
               <Button
                 type="submit"
-                className="w-full h-11 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-medium transition-all duration-200"
+                className="w-full h-11 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium transition-all duration-200 cursor-pointer"
               >
                 Buat Akun
               </Button>
             </form>
           </Form>
-
-          {/* Switch to Login */}
-          {/* {onSwitchToLogin && (
-            <div className="text-center">
-              <span className="text-sm text-slate-600">
-                Already have an account?{" "}
-              </span>
-              <Button
-                variant="link"
-                onClick={onSwitchToLogin}
-                className="px-0 text-sm text-green-600 hover:text-green-800 font-medium"
-              >
-                Sign in
-              </Button>
-            </div>
-          )} */}
+          <div className="text-center">
+            <span className="text-sm text-slate-600">
+              Sudah Punya Akun? {""}
+            </span>
+            <Link
+              href="/signin"
+              className="text-blue-600 hover:text-blue-800 font-medium"
+            >
+              Masuk
+            </Link>
+          </div>
         </CardContent>
       </Card>
     </div>
