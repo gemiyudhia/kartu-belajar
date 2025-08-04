@@ -29,23 +29,13 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { MoreVertical, Play, Edit, Trash2, Brain } from "lucide-react";
-// import type { FlashcardSet } from "@/types/flashcard";
-// import { useFlashcardStore } from "@/store/flashCardStore";
 
 interface FlashcardSetCardProps {
   set: [];
   index: number;
 }
 
-export function FlashcardSetCard({ set, index }: FlashcardSetCardProps) {
-//   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-//   const deleteSet = useFlashcardStore((state) => state.deleteSet);
-
-//   const handleDelete = () => {
-//     deleteSet(set.id);
-//     setShowDeleteDialog(false);
-//   };
-
+const FlashcardSetCard = ({ set, index }: FlashcardSetCardProps) => {
   return (
     <>
       <motion.div
@@ -59,14 +49,7 @@ export function FlashcardSetCard({ set, index }: FlashcardSetCardProps) {
           <CardHeader className="pb-3">
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <CardTitle className="text-lg line-clamp-2">
-                  {/* {set.title} */}
-                </CardTitle>
-                {/* {set.description && (
-                  <CardDescription className="mt-1 line-clamp-2">
-                    {set.description}
-                  </CardDescription>
-                )} */}
+                <CardTitle className="text-lg line-clamp-2"></CardTitle>
               </div>
 
               <DropdownMenu>
@@ -82,10 +65,7 @@ export function FlashcardSetCard({ set, index }: FlashcardSetCardProps) {
                       Edit
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem
-                    // onClick={() => setShowDeleteDialog(true)}
-                    className="text-destructive"
-                  >
+                  <DropdownMenuItem className="text-destructive">
                     <Trash2 className="h-4 w-4 mr-2" />
                     Hapus
                   </DropdownMenuItem>
@@ -136,10 +116,7 @@ export function FlashcardSetCard({ set, index }: FlashcardSetCardProps) {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Batal</AlertDialogCancel>
-            <AlertDialogAction
-            //   onClick={handleDelete}
-              className="bg-destructive text-destructive-foreground"
-            >
+            <AlertDialogAction className="bg-destructive text-destructive-foreground">
               Hapus
             </AlertDialogAction>
           </AlertDialogFooter>
@@ -147,4 +124,6 @@ export function FlashcardSetCard({ set, index }: FlashcardSetCardProps) {
       </AlertDialog>
     </>
   );
-}
+};
+
+export default FlashcardSetCard;

@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Navbar } from "@/components/ui/navbar";
-import { FlashcardSetCard } from "@/components/card/FlashCardSetCard";
+// import { FlashcardSetCard } from "@/components/card/FlashCardSetCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
