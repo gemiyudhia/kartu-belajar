@@ -7,7 +7,7 @@ import { useFlashcardStore } from "@/store/flashCardStore";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import DashboardSearchSort from "@/components/dashboard/DashboardSearchSort";
 import DashboardEmptyState from "@/components/dashboard/DashboardEmptyState";
-// import FlashcardSetCard from "@/components/dashboard/FlashcardSetCard";
+import FlashcardSetCard from "../card/FlashcardSetCard";
 
 export default function HomeDashboard() {
   const sets = useFlashcardStore((state) => state.sets);
@@ -52,9 +52,9 @@ export default function HomeDashboard() {
 
       {filteredAndSortedSets.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* {filteredAndSortedSets.map((set, index) => (
+          {filteredAndSortedSets.map((set, index) => (
             <FlashcardSetCard key={set.id} set={set} index={index} />
-          ))} */}
+          ))}
         </div>
       ) : (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>

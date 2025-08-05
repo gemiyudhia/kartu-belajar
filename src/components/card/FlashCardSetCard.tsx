@@ -1,15 +1,6 @@
-"use client";
-
-import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -29,9 +20,10 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { MoreVertical, Play, Edit, Trash2, Brain } from "lucide-react";
+import { FlashcardSet } from "@/types/flashcard";
 
 interface FlashcardSetCardProps {
-  set: [];
+  set: FlashcardSet;
   index: number;
 }
 
